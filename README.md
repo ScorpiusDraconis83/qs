@@ -85,6 +85,8 @@ assert.deepEqual(qs.parse('foo[bar][baz]=foobarbaz'), {
 });
 ```
 
+Since v6.14.1 and v6.15.2, `parse` interprets nested bracket groups more consistently. Query strings with unbalanced `[`/`]` can produce different results than in 6.15.1; see [#558](https://github.com/ljharb/qs/issues/558).
+
 By default, when nesting objects **qs** will only parse up to 5 children deep.
 This means if you attempt to parse a string like `'a[b][c][d][e][f][g][h][i]=j'` your resulting object will be:
 
@@ -292,6 +294,8 @@ assert.deepEqual(withIndexedEmptyString, { a: ['b', '', 'c'] });
 **qs** will also limit arrays to a maximum of `20` elements.
 Any array members with an index of `20` or greater will instead be converted to an object with the index as the key.
 This is needed to handle cases when someone sent, for example, `a[999999999]` and it will take significant time to iterate over this huge array.
+
+Since v6.14.1 and v6.15.2, the arrayLimit now applies to arrays specified using both the `[]` and `[0]` syntaxes.
 
 ```javascript
 var withMaxIndex = qs.parse('a[100]=b');
