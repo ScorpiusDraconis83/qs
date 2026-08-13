@@ -1117,6 +1117,66 @@ test('stringify()', function (t) {
         st.end();
     });
 
+    t.test('serializes Date values unless filter transforms them', function (st) {
+        var obj = {
+            a: new Date(Date.UTC(2023, 2, 7, 9, 2, 41, 260)),
+            b: [new Date(Date.UTC(2023, 2, 7, 9, 2, 41, 260))]
+        };
+        var iso = '2023-03-07T09%3A02%3A41.260Z';
+        st.equal(
+            qs.stringify(obj, { filter: function (prefix, value) { return value; } }),
+            'a=' + iso + '&b%5B0%5D=' + iso,
+            'Dates returned unchanged by a filter are serialized'
+        );
+        st.equal(
+            qs.stringify({ a: new Date(0) }, { filter: function (prefix, value) { return value instanceof Date ? 'kept' : value; } }),
+            'a=kept',
+            'a filter that transforms a Date wins over default serialization'
+        );
+        st.end();
+    });
+
+    t.test('applies default Date handling to whatever a filter function returns', function (st) {
+        var date = new Date(Date.UTC(2023, 2, 7, 9, 2, 41, 260));
+        var iso = '2023-03-07T09%3A02%3A41.260Z';
+        var identity = function (prefix, value) { return value; };
+
+        st.equal(
+            qs.stringify({ a: { b: date } }, { filter: identity }),
+            'a%5Bb%5D=' + iso,
+            'a nested Date is serialized through a filter'
+        );
+        st.equal(
+            qs.stringify(
+                { a: date },
+                { filter: identity, serializeDate: function (d) { return String(d.getTime()); } }
+            ),
+            'a=1678179761260',
+            '`serializeDate` is honored after a filter'
+        );
+        st.equal(
+            qs.stringify({ a: [date, 'x'] }, { filter: identity, arrayFormat: 'comma' }),
+            'a=' + iso + '%2Cx',
+            'Dates inside a comma array are serialized through a filter, not stringified as locale text'
+        );
+        st.equal(
+            qs.stringify({ a: 'x' }, { filter: function (prefix, value) { return prefix === 'a' ? date : value; } }),
+            'a=' + iso,
+            'a Date produced by the filter is serialized'
+        );
+        st.equal(
+            qs.stringify({ a: date, b: 1 }, { filter: ['a'] }),
+            'a=' + iso,
+            'an array filter still serializes Dates'
+        );
+        st['throws'](
+            function () { qs.stringify({ a: new Date(NaN) }, { filter: identity }); },
+            RangeError,
+            'an invalid Date through a filter throws like the no-filter path'
+        );
+        st.end();
+    });
+
     t.test('can disable uri encoding', function (st) {
         st.equal(qs.stringify({ a: 'b' }, { encode: false }), 'a=b');
         st.equal(qs.stringify({ a: { b: 'c' } }, { encode: false }), 'a[b]=c');
