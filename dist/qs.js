@@ -81,20 +81,20 @@
 },{}],35:[function(require,module,exports){
 "use strict";module.exports=Math.floor;
 
-},{}],39:[function(require,module,exports){
-"use strict";module.exports=Math.pow;
+},{}],34:[function(require,module,exports){
+"use strict";module.exports=Math.abs;
 
 },{}],37:[function(require,module,exports){
 "use strict";module.exports=Math.max;
 
-},{}],34:[function(require,module,exports){
-"use strict";module.exports=Math.abs;
-
-},{}],38:[function(require,module,exports){
-"use strict";module.exports=Math.min;
+},{}],39:[function(require,module,exports){
+"use strict";module.exports=Math.pow;
 
 },{}],40:[function(require,module,exports){
 "use strict";module.exports=Math.round;
+
+},{}],38:[function(require,module,exports){
+"use strict";module.exports=Math.min;
 
 },{}],27:[function(require,module,exports){
 "use strict";module.exports="undefined"!=typeof Reflect&&Reflect.getPrototypeOf||null;
@@ -102,13 +102,13 @@
 },{}],26:[function(require,module,exports){
 "use strict";var $Object=require(22);module.exports=$Object.getPrototypeOf||null;
 
-},{"22":22}],33:[function(require,module,exports){
-"use strict";var call=Function.prototype.call,$hasOwn=Object.prototype.hasOwnProperty,bind=require(24);module.exports=bind.call(call,$hasOwn);
-
-},{"24":24}],41:[function(require,module,exports){
+},{"22":22}],41:[function(require,module,exports){
 "use strict";var $isNaN=require(36);module.exports=function sign(i){return $isNaN(i)||0===i?i:i<0?-1:1};
 
-},{"36":36}],31:[function(require,module,exports){
+},{"36":36}],33:[function(require,module,exports){
+"use strict";var call=Function.prototype.call,$hasOwn=Object.prototype.hasOwnProperty,bind=require(24);module.exports=bind.call(call,$hasOwn);
+
+},{"24":24}],31:[function(require,module,exports){
 "use strict";var origSymbol="undefined"!=typeof Symbol&&Symbol,hasSymbolSham=require(32);module.exports=function hasNativeSymbols(){return"function"==typeof origSymbol&&"function"==typeof Symbol&&"symbol"==typeof origSymbol("foo")&&"symbol"==typeof Symbol("bar")&&hasSymbolSham()};
 
 },{"32":32}],28:[function(require,module,exports){
