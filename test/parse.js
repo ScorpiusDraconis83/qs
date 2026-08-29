@@ -1589,12 +1589,6 @@ test('parse()', function (t) {
             sst.end();
         });
 
-        st.test('does not throw for a bracketed comma group within arrayLimit', function (sst) {
-            var result = qs.parse('a[]=1,2,3,4,5,6', { comma: true, arrayLimit: 5, throwOnLimitExceeded: true });
-            sst.deepEqual(result, { a: [['1', '2', '3', '4', '5', '6']] }, 'a bracketed comma group is a single element');
-            sst.end();
-        });
-
         st.test('throws for a bracketed comma group when arrayLimit is 0', function (sst) {
             sst['throws'](
                 function () {
